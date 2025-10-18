@@ -175,6 +175,7 @@ jobs:
             # echo "CONFIG_KSU_MANUAL_HOOK=y" >> ./arch/arm64/configs/${{ env.DEFCONFIG_NAME }}
             echo "CONFIG_KSU_TRACEPOINT_HOOK=y" >> ./arch/arm64/configs/${{ env.DEFCONFIG_NAME }}
           fi
+          echo "CONFIG_KSU_MANUAL_SU=n" >> ./arch/arm64/configs/${{ env.DEFCONFIG_NAME }}
           if [[ ${{ env.SUSFS_ENABLE }} == "true" ]]; then
             echo "CONFIG_KSU_SUSFS=y" >> ./arch/arm64/configs/${{ env.DEFCONFIG_NAME }}
             echo "CONFIG_KSU_SUSFS_HAS_MAGIC_MOUNT=y" >> ./arch/arm64/configs/${{ env.DEFCONFIG_NAME }}
@@ -191,6 +192,7 @@ jobs:
             echo "CONFIG_KSU_SUSFS_HIDE_KSU_SUSFS_SYMBOLS=y" >> ./arch/arm64/configs/${{ env.DEFCONFIG_NAME }}
             echo "CONFIG_KSU_SUSFS_SPOOF_CMDLINE_OR_BOOTCONFIG=y" >> ./arch/arm64/configs/${{ env.DEFCONFIG_NAME }}
             echo "CONFIG_KSU_SUSFS_OPEN_REDIRECT=y" >> ./arch/arm64/configs/${{ env.DEFCONFIG_NAME }}
+            echo "# CONFIG_KSU_SUSFS_SUS_MAP is not set" >> ./arch/arm64/configs/${{ env.DEFCONFIG_NAME }}
           fi
           if [[ "${{ env.LXC_ENABLE }}" == "true" ]]; then
            echo "CONFIG_VIRTUALIZATION=y" >> ./arch/arm64/configs/${{ env.DEFCONFIG_NAME }}
@@ -338,6 +340,11 @@ jobs:
           cp /tmp/Patches/Patch/susfs_upgrade_to_1510_${{ env.KERNEL_VERSION }}.patch ./
           patch -p1 < susfs_upgrade_to_1510_${{ env.KERNEL_VERSION }}.patch || true
           echo "Detected no-kprobe hook, use no-kprobe patch to update 1.5.10."
+
+          # Upgrade 1.5.11
+          cp /tmp/Patches/Patch/susfs_upgrade_to_1511_${{ env.KERNEL_VERSION }}.patch ./
+          patch -p1 < susfs_upgrade_to_1511_${{ env.KERNEL_VERSION }}.patch || true
+          echo "Detected no-kprobe hook, use no-kprobe patch to update 1.5.11."
 
           # Extra SUSFS Patch
           # cp NonGKI_Kernel_Patches/[patch_folder]/[patch_file].patch ./
